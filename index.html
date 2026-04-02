@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amigo — Drive-By Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#F3F4F6;color:#18240F}
+.db{max-width:480px;margin:0 auto;padding:16px 12px 32px}
+
+/* Header */
+.hdr{background:#30471F;border-radius:12px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.hi{width:36px;height:36px;background:#FFB300;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ht{font-family:'Fredoka',sans-serif;font-size:18px;color:#fff;font-weight:700}
+.hs{font-size:11px;color:rgba(255,255,255,.6);margin-top:1px}
+
+/* Cards */
+.card{background:#fff;border:1px solid #e0dfd8;border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.sec{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#30471F;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #f0f0e8}
+.sec-icon{font-size:18px;line-height:1}
+
+/* Fields */
+.field{margin-bottom:18px}
+.field:last-child{margin-bottom:0}
+.fl{font-size:14px;font-weight:700;color:#18240F;margin-bottom:5px;display:block}
+.fh{font-size:12px;color:#999;margin-bottom:8px;display:block;line-height:1.5}
+input[type=text]{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Nunito',sans-serif}
+input[type=text]:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
+input[type=number]{font-size:18px;font-weight:700;padding:9px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Fredoka',sans-serif;text-align:center;width:90px}
+input[type=number]:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
+textarea{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Nunito',sans-serif;min-height:80px;resize:vertical;line-height:1.5}
+textarea:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
+.inline-row{display:flex;align-items:center;gap:10px}
+.unit{font-size:13px;color:#888;font-weight:700}
+
+/* Option buttons */
+.opts{display:flex;flex-wrap:wrap;gap:7px}
+.opt{padding:10px 15px;border:1.5px solid #d8d8d0;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;background:#fafaf8;color:#888;transition:all .12s;user-select:none;font-family:'Nunito',sans-serif;line-height:1.3}
+.opt.on{background:#30471F;border-color:#30471F;color:#fff}
+
+/* Yes / No row */
+.yn{display:flex;gap:8px}
+.yn .opt{flex:1;text-align:center;font-size:15px;padding:12px}
+
+/* Leaf scale */
+.lf-row{display:flex;gap:5px}
+.lf{flex:1;padding:13px 4px;border:1.5px solid #d8d8d0;border-radius:9px;font-size:16px;font-weight:700;cursor:pointer;background:#fafaf8;color:#888;text-align:center;transition:all .12s;user-select:none;font-family:'Fredoka',sans-serif}
+.lf.on{background:#30471F;border-color:#30471F;color:#fff}
+.lf-labels{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:5px;padding:0 2px}
+
+/* Flags */
+.flags{display:flex;flex-wrap:wrap;gap:7px}
+.flag{padding:9px 13px;border:1.5px solid #d8d8d0;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;background:#fafaf8;color:#888;transition:all .12s;user-select:none;font-family:'Nunito',sans-serif}
+.flag.on{background:#fffbec;border-color:#FFB300;color:#7a5800}
+
+/* Complexity */
+.comp{display:flex;gap:8px}
+.cmp{flex:1;padding:15px 6px;border:1.5px solid #d8d8d0;border-radius:10px;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;cursor:pointer;background:#fafaf8;color:#888;text-align:center;transition:all .12s;user-select:none}
+.cmp.on.easy{background:#e6f0e0;border-color:#30471F;color:#30471F}
+.cmp.on.norm{background:#fff8e6;border-color:#FFB300;color:#7a5800}
+.cmp.on.hard{background:#fce8e8;border-color:#cc3333;color:#cc3333}
+
+/* Conditional field */
+.cond-field{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed #e8e8e0}
+.cond-field.show{display:block}
+
+/* Submit */
+.sub-btn{width:100%;padding:15px;background:#FFB300;color:#18240F;font-size:16px;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:'Fredoka',sans-serif}
+.sub-btn:hover{background:#e6a200}
+.sub-btn:active{transform:scale(.98)}
+
+/* Output */
+.out{background:#f5f5f0;border:1px solid #e0dfd8;border-radius:8px;padding:12px;font-size:12px;font-family:'Nunito',sans-serif;white-space:pre-wrap;color:#555;margin-top:10px;line-height:1.65;display:none}
+</style>
+</head>
+<body>
+<div class="db">
+
+<!-- Header -->
+<div class="hdr">
+  <div class="hi"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#18240F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+  <div><div class="ht">Drive-By Assessment</div><div class="hs">Amigo Landscaping · fill out on-site, then copy & send</div></div>
+</div>
+
+<!-- 1. Lawn & trees -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">🍂</span> Leaves</div>
+  <div class="field">
+    <label class="fl">Leaf level — how heavy is the leaf situation here?</label>
+    <span class="fh">Think about the trees — 0 = almost no leaves ever &nbsp;·&nbsp; 5 = lots of big trees, major cleanup every fall</span>
+    <div class="lf-row" id="oLeaf">
+      <div class="lf" onclick="pickLeaf(this)">0</div>
+      <div class="lf" onclick="pickLeaf(this)">1</div>
+      <div class="lf" onclick="pickLeaf(this)">2</div>
+      <div class="lf" onclick="pickLeaf(this)">3</div>
+      <div class="lf" onclick="pickLeaf(this)">4</div>
+      <div class="lf" onclick="pickLeaf(this)">5</div>
+    </div>
+    <div class="lf-labels"><span>Barely any</span><span>Very heavy</span></div>
+  </div>
+  <div class="field">
+    <label class="fl">How long to clean up the leaves right now — with 2 workers?</label>
+    <div class="opts" id="oLfT">
+      <div class="opt" onclick="pick('oLfT',this)">No cleanup needed</div>
+      <div class="opt" onclick="pick('oLfT',this)">About 1 hour</div>
+      <div class="opt" onclick="pick('oLfT',this)">About 2 hours</div>
+      <div class="opt" onclick="pick('oLfT',this)">About 4 hours</div>
+      <div class="opt" onclick="pick('oLfT',this)">Full day (8 hrs)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Bushes & shrubs -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">🌳</span> Bushes & Shrubs</div>
+  <div class="field">
+    <label class="fl">Small bushes <span style="font-weight:400;color:#aaa">— under 3 ft tall</span></label>
+    <div class="opts" id="oBshS">
+      <div class="opt" onclick="pick('oBshS',this)">None</div>
+      <div class="opt" onclick="pick('oBshS',this)">1 – 3</div>
+      <div class="opt" onclick="pick('oBshS',this)">4 – 8</div>
+      <div class="opt" onclick="pick('oBshS',this)">9 or more</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Medium bushes <span style="font-weight:400;color:#aaa">— 3 to 6 ft tall</span></label>
+    <div class="opts" id="oBshM">
+      <div class="opt" onclick="pick('oBshM',this)">None</div>
+      <div class="opt" onclick="pick('oBshM',this)">1 – 3</div>
+      <div class="opt" onclick="pick('oBshM',this)">4 – 8</div>
+      <div class="opt" onclick="pick('oBshM',this)">9 or more</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Large bushes <span style="font-weight:400;color:#aaa">— over 6 ft tall</span></label>
+    <div class="opts" id="oBshBg">
+      <div class="opt" onclick="pick('oBshBg',this)">None</div>
+      <div class="opt" onclick="pick('oBshBg',this)">1 – 3</div>
+      <div class="opt" onclick="pick('oBshBg',this)">4 – 8</div>
+      <div class="opt" onclick="pick('oBshBg',this)">9 or more</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">How long to trim them all right now — with 2 workers?</label>
+    <div class="opts" id="oBshT">
+      <div class="opt" onclick="pick('oBshT',this)">No trimming needed</div>
+      <div class="opt" onclick="pick('oBshT',this)">About 2 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)">About 4 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)">About 6 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)">Full day (8 hrs)</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Are any bushes tall enough to need a ladder?</label>
+    <div class="yn" id="oBshL">
+      <div class="opt" onclick="pick('oBshL',this)">No</div>
+      <div class="opt" onclick="pick('oBshL',this)">Yes</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">What shape are the bushes in right now?</label>
+    <div class="opts" id="oBshC">
+      <div class="opt" onclick="pick('oBshC',this)">No bushes</div>
+      <div class="opt" onclick="pick('oBshC',this)">Good — just need regular trimming</div>
+      <div class="opt" onclick="pick('oBshC',this)">Overgrown — need a heavy cut-back</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Are there flowering plants that need pruning?</label>
+    <span class="fh">Things like tall grasses, hostas, black-eyed susans, etc.</span>
+    <div class="yn" id="oPer">
+      <div class="opt" onclick="pick('oPer',this);togglePer(this)">No</div>
+      <div class="opt" onclick="pick('oPer',this);togglePer(this)">Yes</div>
+    </div>
+    <div class="cond-field" id="perTime">
+      <label class="fl" style="font-size:13px">How long to prune them right now — with 2 workers?</label>
+      <div class="opts" id="oPerT">
+        <div class="opt" onclick="pick('oPerT',this)">Under 1 hour</div>
+        <div class="opt" onclick="pick('oPerT',this)">1 to 2 hours</div>
+        <div class="opt" onclick="pick('oPerT',this)">Half day or more</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Flower beds -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">🌸</span> Flower Beds & Mulch</div>
+  <div class="field">
+    <label class="fl">What do the beds look like?</label>
+    <div class="opts" id="oBedC">
+      <div class="opt" onclick="pick('oBedC',this)">No beds</div>
+      <div class="opt" onclick="pick('oBedC',this)">Clean</div>
+      <div class="opt" onclick="pick('oBedC',this)">Some weeds</div>
+      <div class="opt" onclick="pick('oBedC',this)">Very overgrown — needs a full reset</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">How does the mulch look?</label>
+    <div class="opts" id="oMch">
+      <div class="opt" onclick="pick('oMch',this)">Looks fresh — no mulch needed</div>
+      <div class="opt" onclick="pick('oMch',this)">Getting thin — needs a top-up</div>
+      <div class="opt" onclick="pick('oMch',this)">No mulch at all</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Roughly how many yards of mulch would it take?</label>
+    <span class="fh">Eyeball it — don't overthink it</span>
+    <div class="inline-row">
+      <input type="number" id="fMulch" placeholder="0" min="0" step="0.5">
+      <span class="unit">yards</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Lawn & driveway size -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">📐</span> Size</div>
+  <div class="field">
+    <label class="fl">How big is the lawn?</label>
+    <div class="opts" id="oLwnSz">
+      <div class="opt" onclick="pick('oLwnSz',this)">No lawn</div>
+      <div class="opt" onclick="pick('oLwnSz',this)">Small</div>
+      <div class="opt" onclick="pick('oLwnSz',this)">Medium</div>
+      <div class="opt" onclick="pick('oLwnSz',this)">Large</div>
+      <div class="opt" onclick="pick('oLwnSz',this)">Very large</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">How big is the driveway?</label>
+    <div class="opts" id="oDrvSz">
+      <div class="opt" onclick="pick('oDrvSz',this)">No driveway</div>
+      <div class="opt" onclick="pick('oDrvSz',this)">Small</div>
+      <div class="opt" onclick="pick('oDrvSz',this)">Medium</div>
+      <div class="opt" onclick="pick('oDrvSz',this)">Large</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Access & flags -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">⚠️</span> Things to Know</div>
+  <div class="field">
+    <label class="fl">Tap anything you noticed</label>
+    <span class="fh">These help us plan the job and avoid surprises</span>
+    <div class="flags">
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Gate or fence — need to confirm access">Gate / fence</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Hard to park on the street">Hard to park</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Dogs or animals on property">Dogs / animals</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Steep driveway">Steep driveway</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Sloped lawn — riding mower may not work">Sloped lawn</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Fragile or decorative plants — handle with care">Fragile plants</div>
+      <div class="flag" onclick="this.classList.toggle('on')" data-v="Sprinkler heads in the lawn">Sprinkler heads</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Overall -->
+<div class="card">
+  <div class="sec"><span class="sec-icon">📋</span> Overall</div>
+  <div class="field">
+    <label class="fl">How would you rate this property overall?</label>
+    <span class="fh">Think about how long the job would take and how tricky it is</span>
+    <div class="comp">
+      <div class="cmp easy" onclick="pickComp(this)">Easy</div>
+      <div class="cmp norm" onclick="pickComp(this)">Normal</div>
+      <div class="cmp hard" onclick="pickComp(this)">Complex</div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="fl">Anything else worth mentioning?</label>
+    <span class="fh">Layout, stuff you couldn't see, anything unusual — anything at all</span>
+    <textarea id="fNotes" placeholder="e.g. big backyard not visible from street, neighbor's trees hang over the left side, couldn't tell if there's a back gate..."></textarea>
+  </div>
+</div>
+
+<!-- Submit -->
+<div class="card">
+  <button class="sub-btn" onclick="build(this)">Copy summary &amp; send</button>
+  <div class="out" id="outBox"></div>
+</div>
+
+</div>
+<script>
+function pick(gid,btn){document.querySelectorAll('#'+gid+' .opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function pickLeaf(btn){document.querySelectorAll('#oLeaf .lf').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function pickComp(btn){document.querySelectorAll('.cmp').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function togglePer(btn){document.getElementById('perTime').classList.toggle('show',btn.textContent.trim()==='Yes');}
+function gv(gid){const el=document.querySelector('#'+gid+' .on');return el?el.textContent.trim():'—';}
+function gLeaf(){const el=document.querySelector('#oLeaf .lf.on');return el?el.textContent.trim():'—';}
+function gComp(){const el=document.querySelector('.cmp.on');return el?el.textContent.trim():'—';}
+function gFlags(){const on=[...document.querySelectorAll('.flags .flag.on')].map(f=>f.dataset.v);return on.length?on.map(v=>'  · '+v).join('\n'):'  · Nothing flagged';}
+
+function build(btn){
+  const mulch=document.getElementById('fMulch').value||'—';
+  const notes=document.getElementById('fNotes').value.trim();
+  const hasPer=gv('oPer')==='Yes';
+
+  const lines=[
+'DRIVE-BY ASSESSMENT',
+'Amigo Landscaping',
+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+'',
+'LEAVES',
+'Leaf level:    '+gLeaf()+' / 5',
+'Cleanup time:  '+gv('oLfT'),
+'',
+'BUSHES & SHRUBS',
+'Small (under 3 ft): '+gv('oBshS'),
+'Medium (3–6 ft):    '+gv('oBshM'),
+'Large (over 6 ft):  '+gv('oBshBg'),
+'Trim time:          '+gv('oBshT'),
+'Ladder needed:      '+gv('oBshL'),
+'Condition now:      '+gv('oBshC'),
+'Perennials:    '+gv('oPer')+(hasPer?'\nPrune time:    '+gv('oPerT'):''),
+'',
+'SIZE',
+'Lawn:          '+gv('oLwnSz'),
+'Driveway:      '+gv('oDrvSz'),
+'',
+'FLOWER BEDS & MULCH',
+'Bed condition: '+gv('oBedC'),
+'Mulch look:    '+gv('oMch'),
+'Mulch needed:  '+mulch+' yards',
+'',
+'THINGS TO KNOW',
+gFlags(),
+'',
+'OVERALL',
+'Complexity:    '+gComp(),
+notes?'\nNOTES\n'+notes:null,
+'',
+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+  ].filter(l=>l!==null).join('\n');
+
+  const out=document.getElementById('outBox');
+  out.textContent=lines;
+  out.style.display='block';
+  navigator.clipboard.writeText(lines)
+    .then(()=>{
+      const o=btn.textContent;
+      btn.textContent='✓ Copied — now send it';
+      btn.style.background='#27500A';
+      btn.style.color='#fff';
+      setTimeout(()=>{btn.textContent=o;btn.style.background='#FFB300';btn.style.color='#18240F';},3000);
+    })
+    .catch(()=>{btn.textContent='Select the text below and copy manually';});
+}
+</script>
+</body>
+</html>
