@@ -17,6 +17,9 @@ body{font-family:'Nunito',sans-serif;background:#F3F4F6;color:#18240F}
 .hi{width:36px;height:36px;background:#FFB300;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ht{font-family:'Fredoka',sans-serif;font-size:18px;color:#fff;font-weight:700}
 .hs{font-size:11px;color:rgba(255,255,255,.6);margin-top:1px}
+.lang-bar{display:none;gap:8px;margin-bottom:12px}/* HIDDEN — change display:none to display:flex to re-enable */
+.lb{flex:1;padding:13px 8px;border:2px solid #d8d8d0;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;background:#fff;color:#888;font-family:'Fredoka',sans-serif;text-align:center;transition:all .12s;user-select:none}
+.lb.on{background:#30471F;border-color:#30471F;color:#fff}
 
 /* Cards */
 .card{background:#fff;border:1px solid #e0dfd8;border-radius:12px;padding:14px 16px;margin-bottom:10px}
@@ -28,8 +31,7 @@ body{font-family:'Nunito',sans-serif;background:#F3F4F6;color:#18240F}
 .field:last-child{margin-bottom:0}
 .fl{font-size:14px;font-weight:700;color:#18240F;margin-bottom:5px;display:block}
 .fh{font-size:12px;color:#999;margin-bottom:8px;display:block;line-height:1.5}
-input[type=text]{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Nunito',sans-serif}
-input[type=text]:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
+.sz-hint{font-weight:400;color:#aaa;font-size:13px}
 input[type=number]{font-size:18px;font-weight:700;padding:9px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Fredoka',sans-serif;text-align:center;width:90px}
 input[type=number]:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
 textarea{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid #d8d8d0;border-radius:8px;background:#fafaf8;color:#18240F;outline:none;font-family:'Nunito',sans-serif;min-height:80px;resize:vertical;line-height:1.5}
@@ -83,15 +85,23 @@ textarea:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
 <!-- Header -->
 <div class="hdr">
   <div class="hi"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#18240F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-  <div><div class="ht">Drive-By Assessment</div><div class="hs">Amigo Landscaping · fill out on-site, then copy & send</div></div>
+  <div>
+    <div class="ht">Drive-By Assessment</div>
+    <div class="hs" data-en="Amigo Landscaping · fill out on-site, then copy &amp; send" data-es="Amigo Landscaping · llena en el lugar, luego copia y envía">Amigo Landscaping · fill out on-site, then copy &amp; send</div>
+  </div>
 </div>
 
-<!-- 1. Lawn & trees -->
+<div class="lang-bar">
+  <button class="lb on" data-lang="en" onclick="setLang('en')">🇺🇸 English</button>
+  <button class="lb" data-lang="es" onclick="setLang('es')">🇲🇽 Español</button>
+</div>
+
+<!-- 1. Leaves -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">🍂</span> Leaves</div>
+  <div class="sec"><span class="sec-icon">🍂</span> <span data-en="Leaves" data-es="Hojas">Leaves</span></div>
   <div class="field">
-    <label class="fl">Leaf level — how heavy is the leaf situation here?</label>
-    <span class="fh">Think about the trees — 0 = almost no leaves ever &nbsp;·&nbsp; 5 = lots of big trees, major cleanup every fall</span>
+    <label class="fl" data-en="Leaf level — how heavy is the leaf situation here?" data-es="Nivel de hojas — ¿qué tan pesada es la situación aquí?">Leaf level — how heavy is the leaf situation here?</label>
+    <span class="fh" data-en="Think about the trees — 0 = almost no leaves ever · 5 = lots of big trees, major cleanup every fall" data-es="Piensa en los árboles — 0 = casi ninguna hoja · 5 = muchos árboles grandes, limpieza mayor cada otoño">Think about the trees — 0 = almost no leaves ever · 5 = lots of big trees, major cleanup every fall</span>
     <div class="lf-row" id="oLeaf">
       <div class="lf" onclick="pickLeaf(this)">0</div>
       <div class="lf" onclick="pickLeaf(this)">1</div>
@@ -100,255 +110,316 @@ textarea:focus{border-color:#30471F;box-shadow:0 0 0 2px rgba(48,71,31,.1)}
       <div class="lf" onclick="pickLeaf(this)">4</div>
       <div class="lf" onclick="pickLeaf(this)">5</div>
     </div>
-    <div class="lf-labels"><span>Barely any</span><span>Very heavy</span></div>
+    <div class="lf-labels">
+      <span data-en="Barely any" data-es="Casi ninguna">Barely any</span>
+      <span data-en="Very heavy" data-es="Muy pesado">Very heavy</span>
+    </div>
   </div>
   <div class="field">
-    <label class="fl">How long to clean up the leaves right now — with 2 workers?</label>
+    <label class="fl" data-en="How long to clean up the leaves right now — with 2 workers?" data-es="¿Cuánto tiempo para limpiar las hojas ahora — con 2 trabajadores?">How long to clean up the leaves right now — with 2 workers?</label>
     <div class="opts" id="oLfT">
-      <div class="opt" onclick="pick('oLfT',this)">No cleanup needed</div>
-      <div class="opt" onclick="pick('oLfT',this)">About 1 hour</div>
-      <div class="opt" onclick="pick('oLfT',this)">About 2 hours</div>
-      <div class="opt" onclick="pick('oLfT',this)">About 4 hours</div>
-      <div class="opt" onclick="pick('oLfT',this)">Full day (8 hrs)</div>
+      <div class="opt" onclick="pick('oLfT',this)" data-en="No cleanup needed" data-es="No hace falta limpiar">No cleanup needed</div>
+      <div class="opt" onclick="pick('oLfT',this)" data-en="About 1 hour" data-es="Como 1 hora">About 1 hour</div>
+      <div class="opt" onclick="pick('oLfT',this)" data-en="About 2 hours" data-es="Como 2 horas">About 2 hours</div>
+      <div class="opt" onclick="pick('oLfT',this)" data-en="About 4 hours" data-es="Como 4 horas">About 4 hours</div>
+      <div class="opt" onclick="pick('oLfT',this)" data-en="Full day (8 hrs)" data-es="Día completo (8 hrs)">Full day (8 hrs)</div>
     </div>
   </div>
 </div>
 
-<!-- 3. Bushes & shrubs -->
+<!-- 2. Bushes -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">🌳</span> Bushes & Shrubs</div>
+  <div class="sec"><span class="sec-icon">🌳</span> <span data-en="Bushes" data-es="Arbustos">Bushes</span></div>
   <div class="field">
-    <label class="fl">Small bushes <span style="font-weight:400;color:#aaa">— under 3 ft tall</span></label>
+    <label class="fl">
+      <span data-en="Small bushes" data-es="Arbustos pequeños">Small bushes</span>
+      <span class="sz-hint"> — </span><span class="sz-hint" data-en="under 3 ft tall" data-es="menos de 3 pies de alto">under 3 ft tall</span>
+    </label>
     <div class="opts" id="oBshS">
-      <div class="opt" onclick="pick('oBshS',this)">None</div>
+      <div class="opt" onclick="pick('oBshS',this)" data-en="None" data-es="Ninguno">None</div>
       <div class="opt" onclick="pick('oBshS',this)">1 – 3</div>
       <div class="opt" onclick="pick('oBshS',this)">4 – 8</div>
-      <div class="opt" onclick="pick('oBshS',this)">9 or more</div>
+      <div class="opt" onclick="pick('oBshS',this)" data-en="9 or more" data-es="9 o más">9 or more</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Medium bushes <span style="font-weight:400;color:#aaa">— 3 to 6 ft tall</span></label>
+    <label class="fl">
+      <span data-en="Medium bushes" data-es="Arbustos medianos">Medium bushes</span>
+      <span class="sz-hint"> — </span><span class="sz-hint" data-en="3 to 6 ft tall" data-es="de 3 a 6 pies de alto">3 to 6 ft tall</span>
+    </label>
     <div class="opts" id="oBshM">
-      <div class="opt" onclick="pick('oBshM',this)">None</div>
+      <div class="opt" onclick="pick('oBshM',this)" data-en="None" data-es="Ninguno">None</div>
       <div class="opt" onclick="pick('oBshM',this)">1 – 3</div>
       <div class="opt" onclick="pick('oBshM',this)">4 – 8</div>
-      <div class="opt" onclick="pick('oBshM',this)">9 or more</div>
+      <div class="opt" onclick="pick('oBshM',this)" data-en="9 or more" data-es="9 o más">9 or more</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Large bushes <span style="font-weight:400;color:#aaa">— over 6 ft tall</span></label>
+    <label class="fl">
+      <span data-en="Large bushes" data-es="Arbustos grandes">Large bushes</span>
+      <span class="sz-hint"> — </span><span class="sz-hint" data-en="over 6 ft tall" data-es="más de 6 pies de alto">over 6 ft tall</span>
+    </label>
     <div class="opts" id="oBshBg">
-      <div class="opt" onclick="pick('oBshBg',this)">None</div>
+      <div class="opt" onclick="pick('oBshBg',this)" data-en="None" data-es="Ninguno">None</div>
       <div class="opt" onclick="pick('oBshBg',this)">1 – 3</div>
       <div class="opt" onclick="pick('oBshBg',this)">4 – 8</div>
-      <div class="opt" onclick="pick('oBshBg',this)">9 or more</div>
+      <div class="opt" onclick="pick('oBshBg',this)" data-en="9 or more" data-es="9 o más">9 or more</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">How long to trim them all right now — with 2 workers?</label>
+    <label class="fl" data-en="How long to trim them all right now — with 2 workers?" data-es="¿Cuánto tiempo para podarlos todos ahora — con 2 trabajadores?">How long to trim them all right now — with 2 workers?</label>
     <div class="opts" id="oBshT">
-      <div class="opt" onclick="pick('oBshT',this)">No trimming needed</div>
-      <div class="opt" onclick="pick('oBshT',this)">About 2 hours</div>
-      <div class="opt" onclick="pick('oBshT',this)">About 4 hours</div>
-      <div class="opt" onclick="pick('oBshT',this)">About 6 hours</div>
-      <div class="opt" onclick="pick('oBshT',this)">Full day (8 hrs)</div>
+      <div class="opt" onclick="pick('oBshT',this)" data-en="No trimming needed" data-es="No hace falta podar">No trimming needed</div>
+      <div class="opt" onclick="pick('oBshT',this)" data-en="About 2 hours" data-es="Como 2 horas">About 2 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)" data-en="About 4 hours" data-es="Como 4 horas">About 4 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)" data-en="About 6 hours" data-es="Como 6 horas">About 6 hours</div>
+      <div class="opt" onclick="pick('oBshT',this)" data-en="Full day (8 hrs)" data-es="Día completo (8 hrs)">Full day (8 hrs)</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Are any bushes tall enough to need a ladder?</label>
+    <label class="fl" data-en="Are any bushes tall enough to need a ladder?" data-es="¿Algún arbusto necesita escalera?">Are any bushes tall enough to need a ladder?</label>
     <div class="yn" id="oBshL">
-      <div class="opt" onclick="pick('oBshL',this)">No</div>
-      <div class="opt" onclick="pick('oBshL',this)">Yes</div>
+      <div class="opt" onclick="pick('oBshL',this)" data-en="No" data-es="No">No</div>
+      <div class="opt" onclick="pick('oBshL',this)" data-en="Yes" data-es="Sí">Yes</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">What shape are the bushes in right now?</label>
+    <label class="fl" data-en="What shape are the bushes in right now?" data-es="¿En qué condición están los arbustos ahora mismo?">What shape are the bushes in right now?</label>
     <div class="opts" id="oBshC">
-      <div class="opt" onclick="pick('oBshC',this)">No bushes</div>
-      <div class="opt" onclick="pick('oBshC',this)">Good — just need regular trimming</div>
-      <div class="opt" onclick="pick('oBshC',this)">Overgrown — need a heavy cut-back</div>
+      <div class="opt" onclick="pick('oBshC',this)" data-en="No bushes" data-es="Sin arbustos">No bushes</div>
+      <div class="opt" onclick="pick('oBshC',this)" data-en="Good — just need regular trimming" data-es="Bien — solo poda regular">Good — just need regular trimming</div>
+      <div class="opt" onclick="pick('oBshC',this)" data-en="Overgrown — need a heavy cut-back" data-es="Muy crecidos — necesitan poda fuerte">Overgrown — need a heavy cut-back</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Are there flowering plants that need pruning?</label>
-    <span class="fh">Things like tall grasses, hostas, black-eyed susans, etc.</span>
+    <label class="fl" data-en="Are there flowering plants that need pruning?" data-es="¿Hay plantas con flores que necesiten poda?">Are there flowering plants that need pruning?</label>
+    <span class="fh" data-en="Things like tall grasses, hostas, black-eyed susans, etc." data-es="Como pastos altos, hostas, margaritas, etc.">Things like tall grasses, hostas, black-eyed susans, etc.</span>
     <div class="yn" id="oPer">
-      <div class="opt" onclick="pick('oPer',this);togglePer(this)">No</div>
-      <div class="opt" onclick="pick('oPer',this);togglePer(this)">Yes</div>
+      <div class="opt" onclick="pick('oPer',this);togglePer(this)" data-en="No" data-es="No">No</div>
+      <div class="opt" onclick="pick('oPer',this);togglePer(this)" data-en="Yes" data-es="Sí">Yes</div>
     </div>
     <div class="cond-field" id="perTime">
-      <label class="fl" style="font-size:13px">How long to prune them right now — with 2 workers?</label>
+      <label class="fl" style="font-size:13px" data-en="How long to prune them right now — with 2 workers?" data-es="¿Cuánto tiempo para podarlas ahora — con 2 trabajadores?">How long to prune them right now — with 2 workers?</label>
       <div class="opts" id="oPerT">
-        <div class="opt" onclick="pick('oPerT',this)">Under 1 hour</div>
-        <div class="opt" onclick="pick('oPerT',this)">1 to 2 hours</div>
-        <div class="opt" onclick="pick('oPerT',this)">Half day or more</div>
+        <div class="opt" onclick="pick('oPerT',this)" data-en="Under 1 hour" data-es="Menos de 1 hora">Under 1 hour</div>
+        <div class="opt" onclick="pick('oPerT',this)" data-en="1 to 2 hours" data-es="1 a 2 horas">1 to 2 hours</div>
+        <div class="opt" onclick="pick('oPerT',this)" data-en="Half day or more" data-es="Medio día o más">Half day or more</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 4. Flower beds -->
+<!-- 3. Flower beds -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">🌸</span> Flower Beds & Mulch</div>
+  <div class="sec"><span class="sec-icon">🌸</span> <span data-en="Flower Beds &amp; Mulch" data-es="Camas y Mantillo">Flower Beds &amp; Mulch</span></div>
   <div class="field">
-    <label class="fl">What do the beds look like?</label>
+    <label class="fl" data-en="What do the beds look like?" data-es="¿Cómo se ven las camas?">What do the beds look like?</label>
     <div class="opts" id="oBedC">
-      <div class="opt" onclick="pick('oBedC',this)">No beds</div>
-      <div class="opt" onclick="pick('oBedC',this)">Clean</div>
-      <div class="opt" onclick="pick('oBedC',this)">Some weeds</div>
-      <div class="opt" onclick="pick('oBedC',this)">Very overgrown — needs a full reset</div>
+      <div class="opt" onclick="pick('oBedC',this)" data-en="No beds" data-es="Sin camas">No beds</div>
+      <div class="opt" onclick="pick('oBedC',this)" data-en="Clean" data-es="Limpias">Clean</div>
+      <div class="opt" onclick="pick('oBedC',this)" data-en="Some weeds" data-es="Algunas malezas">Some weeds</div>
+      <div class="opt" onclick="pick('oBedC',this)" data-en="Very overgrown — needs a full reset" data-es="Muy crecidas — limpieza total">Very overgrown — needs a full reset</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">How does the mulch look?</label>
+    <label class="fl" data-en="How does the mulch look?" data-es="¿Cómo se ve el mantillo?">How does the mulch look?</label>
     <div class="opts" id="oMch">
-      <div class="opt" onclick="pick('oMch',this)">Looks fresh — no mulch needed</div>
-      <div class="opt" onclick="pick('oMch',this)">Getting thin — needs a top-up</div>
-      <div class="opt" onclick="pick('oMch',this)">No mulch at all</div>
+      <div class="opt" onclick="pick('oMch',this)" data-en="Looks fresh — no mulch needed" data-es="Se ve fresco — no se necesita">Looks fresh — no mulch needed</div>
+      <div class="opt" onclick="pick('oMch',this)" data-en="Getting thin — needs a top-up" data-es="Está delgado — necesita más">Getting thin — needs a top-up</div>
+      <div class="opt" onclick="pick('oMch',this)" data-en="No mulch at all" data-es="Sin mantillo">No mulch at all</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Roughly how many yards of mulch would it take?</label>
-    <span class="fh">Eyeball it — don't overthink it</span>
+    <label class="fl" data-en="Roughly how many yards of mulch would it take?" data-es="¿Más o menos cuántas yardas de mantillo se necesitan?">Roughly how many yards of mulch would it take?</label>
+    <span class="fh" data-en="Eyeball it — don't overthink it" data-es="A ojo — no lo pienses tanto">Eyeball it — don't overthink it</span>
     <div class="inline-row">
       <input type="number" id="fMulch" placeholder="0" min="0" step="0.5">
-      <span class="unit">yards</span>
+      <span class="unit" data-en="yards" data-es="yardas">yards</span>
     </div>
   </div>
 </div>
 
-<!-- 5. Lawn & driveway size -->
+<!-- 4. Size -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">📐</span> Size</div>
+  <div class="sec"><span class="sec-icon">📐</span> <span data-en="Size" data-es="Tamaño">Size</span></div>
   <div class="field">
-    <label class="fl">How big is the lawn?</label>
+    <label class="fl" data-en="How big is the lawn?" data-es="¿Qué tan grande es el césped?">How big is the lawn?</label>
     <div class="opts" id="oLwnSz">
-      <div class="opt" onclick="pick('oLwnSz',this)">No lawn</div>
-      <div class="opt" onclick="pick('oLwnSz',this)">Small</div>
-      <div class="opt" onclick="pick('oLwnSz',this)">Medium</div>
-      <div class="opt" onclick="pick('oLwnSz',this)">Large</div>
-      <div class="opt" onclick="pick('oLwnSz',this)">Very large</div>
+      <div class="opt" onclick="pick('oLwnSz',this)" data-en="No lawn" data-es="Sin césped">No lawn</div>
+      <div class="opt" onclick="pick('oLwnSz',this)" data-en="Small" data-es="Pequeño">Small</div>
+      <div class="opt" onclick="pick('oLwnSz',this)" data-en="Medium" data-es="Mediano">Medium</div>
+      <div class="opt" onclick="pick('oLwnSz',this)" data-en="Large" data-es="Grande">Large</div>
+      <div class="opt" onclick="pick('oLwnSz',this)" data-en="Very large" data-es="Muy grande">Very large</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">How big is the driveway?</label>
+    <label class="fl" data-en="How big is the driveway?" data-es="¿Qué tan grande es la entrada?">How big is the driveway?</label>
     <div class="opts" id="oDrvSz">
-      <div class="opt" onclick="pick('oDrvSz',this)">No driveway</div>
-      <div class="opt" onclick="pick('oDrvSz',this)">Small</div>
-      <div class="opt" onclick="pick('oDrvSz',this)">Medium</div>
-      <div class="opt" onclick="pick('oDrvSz',this)">Large</div>
+      <div class="opt" onclick="pick('oDrvSz',this)" data-en="No driveway" data-es="Sin entrada">No driveway</div>
+      <div class="opt" onclick="pick('oDrvSz',this)" data-en="Small" data-es="Pequeña">Small</div>
+      <div class="opt" onclick="pick('oDrvSz',this)" data-en="Medium" data-es="Mediana">Medium</div>
+      <div class="opt" onclick="pick('oDrvSz',this)" data-en="Large" data-es="Grande">Large</div>
     </div>
   </div>
 </div>
 
-<!-- 6. Access & flags -->
+<!-- 5. Things to Know -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">⚠️</span> Things to Know</div>
+  <div class="sec"><span class="sec-icon">⚠️</span> <span data-en="Things to Know" data-es="Cosas a Saber">Things to Know</span></div>
   <div class="field">
-    <label class="fl">Tap anything you noticed</label>
-    <span class="fh">These help us plan the job and avoid surprises</span>
+    <label class="fl" data-en="Tap anything you noticed" data-es="Toca todo lo que viste">Tap anything you noticed</label>
+    <span class="fh" data-en="These help us plan the job and avoid surprises" data-es="Esto nos ayuda a planear el trabajo y evitar sorpresas">These help us plan the job and avoid surprises</span>
     <div class="flags">
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Gate or fence — need to confirm access">Gate / fence</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Hard to park on the street">Hard to park</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Dogs or animals on property">Dogs / animals</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Steep driveway">Steep driveway</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Sloped lawn — riding mower may not work">Sloped lawn</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Fragile or decorative plants — handle with care">Fragile plants</div>
-      <div class="flag" onclick="this.classList.toggle('on')" data-v="Sprinkler heads in the lawn">Sprinkler heads</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Gate / fence" data-es="Portón / cerca"
+        data-v="Gate or fence — need to confirm access" data-v-es="Portón o cerca — confirmar acceso">Gate / fence</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Hard to park" data-es="Difícil estacionar"
+        data-v="Hard to park on the street" data-v-es="Difícil estacionar en la calle">Hard to park</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Dogs / animals" data-es="Perros / animales"
+        data-v="Dogs or animals on property" data-v-es="Perros o animales en la propiedad">Dogs / animals</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Steep driveway" data-es="Entrada empinada"
+        data-v="Steep driveway" data-v-es="Entrada empinada">Steep driveway</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Sloped lawn" data-es="Césped inclinado"
+        data-v="Sloped lawn — riding mower may not work" data-v-es="Césped inclinado — podadora puede no funcionar">Sloped lawn</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Fragile plants" data-es="Plantas delicadas"
+        data-v="Fragile or decorative plants — handle with care" data-v-es="Plantas delicadas — manejar con cuidado">Fragile plants</div>
+      <div class="flag" onclick="this.classList.toggle('on')"
+        data-en="Sprinkler heads" data-es="Cabezas de riego"
+        data-v="Sprinkler heads in the lawn" data-v-es="Cabezas de riego en el césped">Sprinkler heads</div>
     </div>
   </div>
 </div>
 
 <!-- 6. Overall -->
 <div class="card">
-  <div class="sec"><span class="sec-icon">📋</span> Overall</div>
+  <div class="sec"><span class="sec-icon">📋</span> <span data-en="Overall" data-es="General">Overall</span></div>
   <div class="field">
-    <label class="fl">How would you rate this property overall?</label>
-    <span class="fh">Think about how long the job would take and how tricky it is</span>
+    <label class="fl" data-en="How would you rate this property overall?" data-es="¿Cómo calificarías esta propiedad en general?">How would you rate this property overall?</label>
+    <span class="fh" data-en="Think about how long the job would take and how tricky it is" data-es="Piensa en cuánto tiempo tomaría y qué tan difícil es">Think about how long the job would take and how tricky it is</span>
     <div class="comp">
-      <div class="cmp easy" onclick="pickComp(this)">Easy</div>
-      <div class="cmp norm" onclick="pickComp(this)">Normal</div>
-      <div class="cmp hard" onclick="pickComp(this)">Complex</div>
+      <div class="cmp easy" onclick="pickComp(this)" data-en="Easy" data-es="Fácil">Easy</div>
+      <div class="cmp norm" onclick="pickComp(this)" data-en="Normal" data-es="Normal">Normal</div>
+      <div class="cmp hard" onclick="pickComp(this)" data-en="Complex" data-es="Complejo">Complex</div>
     </div>
   </div>
   <div class="field">
-    <label class="fl">Anything else worth mentioning?</label>
-    <span class="fh">Layout, stuff you couldn't see, anything unusual — anything at all</span>
-    <textarea id="fNotes" placeholder="e.g. big backyard not visible from street, neighbor's trees hang over the left side, couldn't tell if there's a back gate..."></textarea>
+    <label class="fl" data-en="Anything else worth mentioning?" data-es="¿Algo más que mencionar?">Anything else worth mentioning?</label>
+    <span class="fh" data-en="Layout, stuff you couldn't see, anything unusual — anything at all" data-es="El diseño, cosas que no pudiste ver, algo fuera de lo normal">Layout, stuff you couldn't see, anything unusual — anything at all</span>
+    <textarea id="fNotes"
+      data-en-ph="e.g. big backyard not visible from street, neighbor's trees hang over the left side..."
+      data-es-ph="ej. patio grande no visible desde la calle, árboles del vecino cuelgan al lado izquierdo..."
+      placeholder="e.g. big backyard not visible from street, neighbor's trees hang over the left side..."></textarea>
   </div>
 </div>
 
 <!-- Submit -->
 <div class="card">
-  <button class="sub-btn" onclick="build(this)">Copy summary &amp; send</button>
+  <button class="sub-btn" id="subBtn" onclick="build(this)"
+    data-en="Copy summary &amp; send" data-es="Copiar resumen y enviar">Copy summary &amp; send</button>
   <div class="out" id="outBox"></div>
 </div>
 
 </div>
 <script>
+let lang = 'en';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.dataset[l] || el.dataset.en;
+  });
+  // Handle elements with HTML entities (& in section headers, button)
+  document.querySelectorAll('[data-en*="&"]').forEach(el => {
+    el.innerHTML = el.dataset[l] || el.dataset.en;
+  });
+  // Textarea placeholder
+  const ta = document.getElementById('fNotes');
+  ta.placeholder = l === 'es' ? ta.dataset.esPh : ta.dataset.enPh;
+  // Lang toggle state
+  document.querySelectorAll('.lb').forEach(b => b.classList.toggle('on', b.dataset.lang === l));
+}
+
 function pick(gid,btn){document.querySelectorAll('#'+gid+' .opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
 function pickLeaf(btn){document.querySelectorAll('#oLeaf .lf').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
 function pickComp(btn){document.querySelectorAll('.cmp').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
-function togglePer(btn){document.getElementById('perTime').classList.toggle('show',btn.textContent.trim()==='Yes');}
+function togglePer(btn){
+  const yesText = lang === 'es' ? 'Sí' : 'Yes';
+  document.getElementById('perTime').classList.toggle('show', btn.textContent.trim() === yesText);
+}
 function gv(gid){const el=document.querySelector('#'+gid+' .on');return el?el.textContent.trim():'—';}
 function gLeaf(){const el=document.querySelector('#oLeaf .lf.on');return el?el.textContent.trim():'—';}
 function gComp(){const el=document.querySelector('.cmp.on');return el?el.textContent.trim():'—';}
-function gFlags(){const on=[...document.querySelectorAll('.flags .flag.on')].map(f=>f.dataset.v);return on.length?on.map(v=>'  · '+v).join('\n'):'  · Nothing flagged';}
+function gFlags(){
+  const noneText = lang === 'es' ? '  · Nada marcado' : '  · Nothing flagged';
+  const on = [...document.querySelectorAll('.flags .flag.on')].map(f => lang === 'es' ? (f.dataset.vEs || f.dataset.v) : f.dataset.v);
+  return on.length ? on.map(v => '  · ' + v).join('\n') : noneText;
+}
 
-function build(btn){
-  const mulch=document.getElementById('fMulch').value||'—';
-  const notes=document.getElementById('fNotes').value.trim();
-  const hasPer=gv('oPer')==='Yes';
+function t(en, es) { return lang === 'es' ? es : en; }
 
-  const lines=[
-'DRIVE-BY ASSESSMENT',
+function build(btn) {
+  const mulch = document.getElementById('fMulch').value || '—';
+  const notes = document.getElementById('fNotes').value.trim();
+  const hasPer = gv('oPer') === t('Yes','Sí');
+
+  const lines = [
+t('DRIVE-BY ASSESSMENT','EVALUACIÓN DE PROPIEDAD'),
 'Amigo Landscaping',
 '━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
 '',
-'LEAVES',
-'Leaf level:    '+gLeaf()+' / 5',
-'Cleanup time:  '+gv('oLfT'),
+t('LEAVES','HOJAS'),
+t('Leaf level:   ','Nivel hojas:  ') + gLeaf() + ' / 5',
+t('Cleanup time: ','Tiempo limp.: ') + gv('oLfT'),
 '',
-'BUSHES & SHRUBS',
-'Small (under 3 ft): '+gv('oBshS'),
-'Medium (3–6 ft):    '+gv('oBshM'),
-'Large (over 6 ft):  '+gv('oBshBg'),
-'Trim time:          '+gv('oBshT'),
-'Ladder needed:      '+gv('oBshL'),
-'Condition now:      '+gv('oBshC'),
-'Perennials:    '+gv('oPer')+(hasPer?'\nPrune time:    '+gv('oPerT'):''),
+t('BUSHES','ARBUSTOS'),
+t('Small (under 3 ft): ','Pequeños (< 3 pies): ') + gv('oBshS'),
+t('Medium (3–6 ft):    ','Medianos (3–6 pies): ') + gv('oBshM'),
+t('Large (over 6 ft):  ','Grandes (> 6 pies):  ') + gv('oBshBg'),
+t('Trim time:          ','Tiempo poda:         ') + gv('oBshT'),
+t('Ladder needed:      ','Escalera:            ') + gv('oBshL'),
+t('Condition now:      ','Condición ahora:     ') + gv('oBshC'),
+t('Perennials:         ','Perennes:            ') + gv('oPer') + (hasPer ? '\n' + t('Prune time:         ','Tiempo poda:         ') + gv('oPerT') : ''),
 '',
-'SIZE',
-'Lawn:          '+gv('oLwnSz'),
-'Driveway:      '+gv('oDrvSz'),
+t('FLOWER BEDS & MULCH','CAMAS Y MANTILLO'),
+t('Bed condition: ','Camas:         ') + gv('oBedC'),
+t('Mulch look:    ','Mantillo:      ') + gv('oMch'),
+t('Mulch needed:  ','Mantillo est.: ') + mulch + ' ' + t('yards','yardas'),
 '',
-'FLOWER BEDS & MULCH',
-'Bed condition: '+gv('oBedC'),
-'Mulch look:    '+gv('oMch'),
-'Mulch needed:  '+mulch+' yards',
+t('SIZE','TAMAÑO'),
+t('Lawn:          ','Césped:        ') + gv('oLwnSz'),
+t('Driveway:      ','Entrada:       ') + gv('oDrvSz'),
 '',
-'THINGS TO KNOW',
+t('THINGS TO KNOW','COSAS A SABER'),
 gFlags(),
 '',
-'OVERALL',
-'Complexity:    '+gComp(),
-notes?'\nNOTES\n'+notes:null,
+t('OVERALL','GENERAL'),
+t('Complexity:    ','Complejidad:   ') + gComp(),
+notes ? '\n' + t('NOTES','NOTAS') + '\n' + notes : null,
 '',
 '━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
-  ].filter(l=>l!==null).join('\n');
+  ].filter(l => l !== null).join('\n');
 
-  const out=document.getElementById('outBox');
-  out.textContent=lines;
-  out.style.display='block';
+  const out = document.getElementById('outBox');
+  out.textContent = lines;
+  out.style.display = 'block';
+
+  const copiedMsg = t('✓ Copied — now send it', '✓ Copiado — ahora envíalo');
+  const failMsg   = t('Select the text below and copy manually', 'Selecciona el texto abajo y cópialo manualmente');
+  const origLabel = btn.dataset[lang] || btn.dataset.en;
+
   navigator.clipboard.writeText(lines)
-    .then(()=>{
-      const o=btn.textContent;
-      btn.textContent='✓ Copied — now send it';
-      btn.style.background='#27500A';
-      btn.style.color='#fff';
-      setTimeout(()=>{btn.textContent=o;btn.style.background='#FFB300';btn.style.color='#18240F';},3000);
+    .then(() => {
+      btn.textContent = copiedMsg;
+      btn.style.background = '#27500A';
+      btn.style.color = '#fff';
+      setTimeout(() => { btn.innerHTML = origLabel; btn.style.background = '#FFB300'; btn.style.color = '#18240F'; }, 3000);
     })
-    .catch(()=>{btn.textContent='Select the text below and copy manually';});
+    .catch(() => { btn.textContent = failMsg; });
 }
 </script>
 </body>
